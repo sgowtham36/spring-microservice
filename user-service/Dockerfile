@@ -2,13 +2,13 @@
 FROM maven:3.5-jdk-8 as builder
 
 # copy the pom.xml file and save dependencies to ofline for a faster build time.
-ADD ./user-service/pom.xml ./pom.xml
+ADD ./pom.xml ./pom.xml
 
 # save the dependency jars to offline
 RUN mvn dependency:go-offline -B
 
 # copy the source folder to the docker
-COPY ./user-service/src ./src
+COPY ./src ./src
 
 # build the jar
 RUN mvn -Dmaven.test.skip=true package

@@ -24,80 +24,58 @@ services:
             - "9042:9042"
         container_name: cassandra
     discovery-service:
-        build:
-            context: ./
-            dockerfile: ./discovery-server/Dockerfile
+        build: ./discovery-server
         entrypoint: /wait-for-it.sh -t 5000 mysql:3306 -- java -Djava.security.egd=file:/dev/./urandom -Dspring.profiles.active=container -jar app.jar
         ports: 
             - 8761:8761
         links: 
             - epharma-mysql:mysql
     user-service:
-        build:
-            context: ./
-            dockerfile: ./user-service/Dockerfile
+        build: ./user-service
         entrypoint: /wait-for-it.sh discovery-service:8761 -- java -Djava.security.egd=file:/dev/./urandom -Dspring.profiles.active=container -jar app.jar
         links:
             - epharma-mysql:mysql
-        environment:
-            - JAVA_OPTS=
-                -DEUREKA_SERVER=http://discovery-service:8761/eureka
         depends_on: 
             - discovery-service
         ports:
             - 8000:8000
         container_name: user-service
     log-service:
-        build: 
-            context: ./
-            dockerfile: ./log-service/Dockerfile
+        build: ./log-service
         environment: 
             SPRING_DATA_CASSANDRA_CONTACT_POINTS: cassandra
         entrypoint: /wait-for-it.sh cassandra:9042 -- java -Djava.security.egd=file:/dev/./urandom -Dspring.profiles.active=container -jar app.jar
-        environment:
-            - JAVA_OPTS=
-                -DEUREKA_SERVER=http://discovery-service:8761/eureka
-        depends_on: 
-            - cassandra
+        depends_on:
             - discovery-service
+            - cassandra
+            
         ports: 
             - 8002:8002
     blog-service:
-        build:
-            context: ./
-            dockerfile: ./blog-service/Dockerfile
+        build: ./blog-service
         entrypoint: /wait-for-it.sh user-service:8000 -- java -Djava.security.egd=file:/dev/./urandom -Dspring.profiles.active=container -jar app.jar
-        environment:
-            - JAVA_OPTS=
-                -DEUREKA_SERVER=http://discovery-service:8761/eureka
         depends_on:
+            - discovery-service
             - user-service
             - epharma-mysql
             - log-service
-            - discovery-service
         links: 
             - epharma-mysql:mysql
         ports:
             - 8001:8001
         container_name: blog-service
     gateway-service:
-        build:
-            context: ./
-            dockerfile: ./zuul-gateway/Dockerfile
+        build: ./zuul-gateway
         entrypoint: /wait-for-it.sh blog-service:8001 -- java -Djava.security.egd=file:/dev/./urandom -Dspring.profiles.active=container -jar app.jar
         depends_on:
+            - discovery-service
             - user-service
             - blog-service
             - log-service
-            - discovery-service
         ports: 
             - 8765:8765
-        environment:
-            - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE= http://discovery-service:8761/eureka
     client-service:
-        build:
-            context: ./
-            dockerfile: ./epharma-client/Dockerfile
+        build: ./epharma-client
         ports: 
             - 4200:80
 

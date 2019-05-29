@@ -1,6 +1,6 @@
 FROM node:latest as builder
 
-COPY ./epharma-client/package.json ./epharma-client/package-lock.json ./
+COPY ./package.json ./package-lock.json ./
 
 RUN npm set progress=false && npm config set depth 0 && npm cache clean --force
 
@@ -9,7 +9,7 @@ RUN npm i && mkdir /ng-app && cp -R ./node_modules ./ng-app
 
 WORKDIR /ng-app
 
-COPY ./epharma-client .
+COPY . .
 
 ## Build the angular app in production mode and store the artifacts in dist folder
 RUN $(npm bin)/ng build --prod
@@ -17,7 +17,7 @@ RUN $(npm bin)/ng build --prod
 FROM nginx:latest
 
 ## Copy our default nginx config
-COPY ./epharma-client/nginx/default.conf /etc/nginx/conf.d/
+COPY ./nginx/default.conf /etc/nginx/conf.d/
 
 ## Remove default nginx website
 RUN rm -rf /usr/share/nginx/html/*
