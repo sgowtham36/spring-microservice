@@ -2,6 +2,7 @@ package com.epharma.userservice.service;
 
 import java.util.List;
 
+import com.epharma.userservice.model.Role;
 import com.epharma.userservice.model.User;
 import com.epharma.userservice.repository.UserRepository;
 
@@ -14,29 +15,26 @@ import org.springframework.stereotype.Service;
 public class UserServiceImpl implements UserService{
 
     @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
 
     @Autowired
-    PasswordEncoder passwordEncoder;
+    private PasswordEncoder passwordEncoder;
 
     @Override
     public void save(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setRole(Role.USER);
         userRepository.save(user);
-        
     }
 
     @Override
     public User findByUsername(String username) {
         return userRepository.findByUsername(username);
-        
     }
 
     @Override
-    public List<String> findUsers(List<Long> idList) {
-
-        return this.userRepository.findUserNames(idList);    
-        
+    public List<String> findUsers(List<Long> idList){
+        return this.userRepository.findUserNames(idList);
     }
 
 }

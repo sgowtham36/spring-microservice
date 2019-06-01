@@ -4,4 +4,4 @@ spring:
     url: jdbc:mysql://mysql:3306/epharma?createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true&useSSL=false
     username: demo
     password: demo
-    initialization-mode: always
+    initialize: true

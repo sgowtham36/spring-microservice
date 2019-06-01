@@ -31,7 +31,7 @@ public class UserController {
         userService.save(user);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
-    @GetMapping("/api/user/service/user")
+    @GetMapping("/service/user")
     public ResponseEntity<?> getUser(Principal principal) {
         if(principal==null || principal.getName() == null){
             return ResponseEntity.ok(principal);

@@ -1,23 +1,20 @@
 package com.epharma.logservice.model;
 
-import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.UUID;
-
-import javax.persistence.Column;
-import javax.persistence.Table;
 
 import com.datastax.driver.core.DataType;
 
 import org.springframework.data.cassandra.core.mapping.CassandraType;
+import org.springframework.data.cassandra.core.mapping.Column;
 import org.springframework.data.cassandra.core.mapping.PrimaryKey;
+import org.springframework.data.cassandra.core.mapping.Table;
 
 import lombok.Data;
 
 @Data
-
-@Table(name="log")
-public class Log implements Serializable{
+@Table("log")
+public class Log implements IModel{
 
     private static final long serialVersionUID = 1L;
 
@@ -25,13 +22,13 @@ public class Log implements Serializable{
     @CassandraType(type = DataType.Name.UUID)
     private UUID id;
 
-    @Column(name = "ip")
+    @Column("ip")
     private String ip;
 
-    @Column(name = "article_id")
+    @Column("article_id")
     private Long articleId;
 
-    @Column(name = "log_date")
+    @Column("log_date")
     private LocalDateTime logDate;
 
 

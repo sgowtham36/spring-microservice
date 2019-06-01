@@ -32,5 +32,6 @@ COPY --from=builder /target/*.jar app.jar
 # reconfirm the app.jar
 RUN sh -c 'touch /app.jar'
 
+ENV JAVA_OPTS=""
 # run the jar file
-ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-Dspring.profiles.active=container","-jar","/app.jar"]
+ENTRYPOINT ["java","$JAVA_OPTS","-Djava.security.egd=file:/dev/./urandom","-Dspring.profiles.active=container","-jar","/app.jar"]

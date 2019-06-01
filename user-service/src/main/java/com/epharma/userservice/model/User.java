@@ -1,6 +1,5 @@
 package com.epharma.userservice.model;
 
-import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -20,7 +19,7 @@ import lombok.Setter;
 @Setter
 @Entity
 @Table(name = "app_user")
-public class User implements Serializable {
+public class User implements IModel {
 
     private static final long serialVersionUID = 1L;
     @Id

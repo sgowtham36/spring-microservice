@@ -41,8 +41,8 @@ public class LogController{
     }
 
     @GetMapping("/service/summary")
-    public ResponseEntity<?> getSummaryOfArticle(@RequestBody Long postId){
-        return new ResponseEntity<>(logService.findSummaryByArticleId(postId),HttpStatus.OK);
+    public ResponseEntity<?> getSummaryOfArticle(@RequestBody Long articleId){
+        return new ResponseEntity<>(logService.findSummaryByArticleId(articleId),HttpStatus.OK);
 
     }
 
