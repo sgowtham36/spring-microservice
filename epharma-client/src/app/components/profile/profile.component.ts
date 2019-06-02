@@ -16,8 +16,8 @@ export class ProfileComponent implements OnInit {
 
   displayedColumns: string[] = ['title', 'author', 'category', 'date'];
   dataSource: MatTableDataSource<Article> = new MatTableDataSource();
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatPaginator,{static:false}) paginator: MatPaginator;
+  @ViewChild(MatSort,{static:false}) sort: MatSort;
 
   currentUser: User;
   constructor(public authService: AuthService, public router: Router, private blogService: BlogService) {
